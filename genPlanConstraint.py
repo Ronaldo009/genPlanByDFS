@@ -476,6 +476,17 @@ def deduPoiConstraint(node,poiList,broadParts,broadPois):
     return True
 
 
+def getPois(stack,broadParts):
+    pois=[]
+    for part in stack:
+        pois.extend(broadParts[part]['poi_ids'])
+
+    return pois
+
+
+
+
+
 
 
 

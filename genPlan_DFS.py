@@ -14,13 +14,23 @@ import ast
 import copy
 class Graph(object):
 
-    def __init__(self,GIVEN_QUERY,*args,**kwargs):
+    def __init__(self,GIVEN_QUERY,nextPartsOf, prevPartsOf, pois, parts, places,schedulePois, schedulePlaces, poiTags, placePoisMapping, currencies, poiCalendar):
 
-        self.parts_all,self.nextPartsOf,self.startParts,self.endparts ,self.pois,self.parts,self.places, \
-        self.schedulePois,self.schedulePlaces,self.poiTags,self.placePoisMapping,self.currencies,self.poiCalendar, \
-        self.poi_ids_satisfy_parts,self.countryIds_query,self.days_query,self.regions_query,self.regionDic_query,\
+        self.countryIds_query,self.days_query,self.regions_query,self.regionDic_query,\
         self.pois_query,self.regionNotGo_query,self.poiNotGo_query,self.regionSorted_query,self.availableMonths_query,self.price_query,\
-        self.hotelRating_query,self.arrivalRegionId_query,self.departRegionId_query= query_parse.query_parse(GIVEN_QUERY)
+        self.hotelRating_query,self.arrivalRegionId_query,self.departRegionId_query,self.startParts,self.endParts= query_parse.query_parse(GIVEN_QUERY)
+
+        self.nextPartsOf=nextPartsOf
+        self.prevPartsOf=prevPartsOf
+        self.pois=pois
+        self.parts=parts
+        self.places=places
+        self.placePoisMapping=placePoisMapping
+        self.poiTags=poiTags
+        self.currencies=currencies
+        self.schedulePlaces=schedulePlaces
+        self.schedulePois=schedulePois
+        self.poiCalendar=poiCalendar
 
         self.node_neighbors = self.nextPartsOf
         self.tabuDic={}
@@ -62,11 +72,6 @@ class Graph(object):
         poiList=list(set(poiList)-set(poi_ids_copy))
         return poiList
 
-    # def backTrack(self,node,stack,poiList):
-    #     poiList = self.minsPoi(node=node, poiList=poiList)
-    #     self.update_node_neighbours(stack)
-    #     if len(stack) > 0:
-    #         node = stack[-1]
 
     def addTabuDic(self,tabuDic,stack):
         """
@@ -246,7 +251,7 @@ class Graph(object):
                                     poiList = self.addPoi(node=node, poiList=poiList)
                                     print("addPoi")
                                     # 判断是否结束
-                                    if node in self.endparts:
+                                    if node in self.endParts:
                                         indexMap = genPlanConstraint.getPathDetail(stack, self.parts, self.pois,
                                                                                    self.schedulePois,
                                                                                    self.places, self.schedulePlaces,
@@ -289,41 +294,46 @@ class Graph(object):
         self.end=time.clock()
         self.runtime=self.end-self.start
         return [],self.runtime
+
+    # def dfs_bidirectionalSearch(self,node):
+    #     stack
+
     def run(self):
         runtime=0
         orderDFS=[]
         for node in self.startParts:
             orderDFS ,runtime= g.depth_first_search(node)
-            if orderDFS:
+            # if orderDFS:
+            #     break
+            if runtime<7 and orderDFS:
                 break
-            # if runtime<7 and orderDFS:
-            #     break
-            # if runtime>7:
-            #     break
+            if runtime>7:
+                break
         print("----------------程序完成,用时" + str(("%.2f") % (runtime)) + "秒------------------")
 
         return orderDFS,runtime
 
 if __name__ == '__main__':
     count = 0
-    with open("result2.csv",'w') as csvout ,open('result1.csv','r') as csvin:
+    from getSqlData import getSqlData
+    nextPartsOf, prevPartsOf, pois, parts, places,schedulePois, schedulePlaces, poiTags, placePoisMapping, currencies, poiCalendar=getSqlData()
+    with open("result2.csv",'w') as csvout ,open('/Users/yanfa/Downloads/result(1).csv','r') as csvin:
         reader=csv.reader(csvin)
         next(reader,None)
         writer=csv.writer(csvout)
         writer.writerow(['IsGot','Path','Time''Query'])
         for row in reader:
-            if row[0]=="False":
-                GIVEN_QUERY = ast.literal_eval(row[3])
-                # GIVEN_QUERY={'days': 12, 'countries': [{'country_id': 28, 'day': None}],
-                #              'regions': [{'region_id': 2, 'day': None}, {'region_id': 70, 'day': None}],
-                #              'pois': [1361]}
-                g = Graph(GIVEN_QUERY)
-                res,runtime=g.run()
-                isGot=False
-                if res:
-                    isGot=True
-                writer.writerow([isGot,res,runtime,row[3]])
-                count+=1
+
+            GIVEN_QUERY = ast.literal_eval(row[9])
+            g = Graph(GIVEN_QUERY,nextPartsOf, prevPartsOf, pois, parts, places,schedulePois, schedulePlaces, poiTags, placePoisMapping, currencies, poiCalendar)
+            res,runtime=g.run()
+            isGot=False
+            if res:
+                isGot=True
+            writer.writerow([isGot,res,runtime,row[9]])
+            count+=1
+            # if count>100:
+            #     break
 
 
 

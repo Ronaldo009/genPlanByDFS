@@ -1,5 +1,5 @@
 IsGot,Path,TimeQuery
-False,[],0.03125500000000159,"{'days': [], 'countries': [{'country_id': 2, 'days': None}], 'regions': [{'region_id': 54, 'days': None}], 'regionNotGo': [84, 63], 'pois': [], 'poiNotGo': [], 'price': [10200, 25200], 'isSelfDriving': 1, 'arrivalRegionId': 84, 'departRegionId': 84}"
+False,[],0.03125500000000159,"{'days': [], 'countries': [{'country_id': 2, 'days': None}], 'regions': [], 'regionNotGo': [], 'pois': [], 'poiNotGo': [], 'price': [1886, 25660]}"
 True,"[744, 745, 746, 747, 1050, 8934, 2030]",0.11520799999999554,"{'days': [], 'countries': [{'country_id': 28, 'days': None}], 'regions': [], 'regionNotGo': [], 'pois': [], 'poiNotGo': [], 'price': [724, 38271], 'arrivalRegionId': 27, 'departRegionId': 27}"
 True,"[249, 250, 251, 252, 8993]",0.09254599999999868,"{'days': [], 'countries': [{'country_id': 9, 'days': None}], 'regions': [], 'regionNotGo': [], 'pois': [], 'poiNotGo': [], 'price': [1886, 25660]}"
 True,"[249, 4136, 1095, 3090, 3092, 8860, 3457, 7244, 7268]",0.09413400000001104,"{'days': [], 'countries': [{'country_id': 9, 'days': None}], 'regions': [], 'regionNotGo': [], 'pois': [], 'poiNotGo': []}"
